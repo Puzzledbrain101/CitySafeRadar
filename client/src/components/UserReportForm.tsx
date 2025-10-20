@@ -31,7 +31,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import type { InsertUserReport } from '@shared/schema';
+import type { InsertUserReport, UserReport } from '@shared/schema';
 
 const reportSchema = z.object({
   location: z.string().min(1, 'Location is required'),
@@ -64,7 +64,8 @@ export default function UserReportForm({ open, onOpenChange }: UserReportFormPro
   
   const submitReportMutation = useMutation({
     mutationFn: async (data: InsertUserReport) => {
-      return await apiRequest<InsertUserReport>('POST', '/api/user-reports', data);
+      const response = await apiRequest('POST', '/api/user-reports', data);
+      return await response.json() as UserReport;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user-reports'] });

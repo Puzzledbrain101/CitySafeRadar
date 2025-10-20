@@ -303,6 +303,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         waypoints: JSON.stringify(waypoints),
       });
       
+      console.log('Route created:', JSON.stringify(route, null, 2));
       res.json(route);
     } catch (error) {
       console.error('Route calculation error:', error);

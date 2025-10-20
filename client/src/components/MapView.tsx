@@ -62,7 +62,7 @@ export default function MapView({ regions, selectedRoute, onRegionClick }: MapVi
   };
   
   // Parse route waypoints for display
-  const routeWaypoints = selectedRoute 
+  const routeWaypoints = selectedRoute && selectedRoute.waypoints
     ? (JSON.parse(selectedRoute.waypoints) as [number, number][])
     : [];
   

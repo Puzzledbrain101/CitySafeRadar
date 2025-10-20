@@ -20,8 +20,8 @@ export default function RoutePlanner({ onRouteCalculated, className = '' }: Rout
   
   const calculateRouteMutation = useMutation({
     mutationFn: async (data: { source: string; destination: string }) => {
-      const response = await apiRequest<Route>('POST', '/api/route', data);
-      return response;
+      const response = await apiRequest('POST', '/api/route', data);
+      return await response.json() as Route;
     },
     onSuccess: (route) => {
       queryClient.invalidateQueries({ queryKey: ['/api/routes'] });
@@ -123,7 +123,7 @@ export default function RoutePlanner({ onRouteCalculated, className = '' }: Rout
         </form>
         
         {currentRoute && (
-          <div className="pt-4 border-t border-gray-700/50 space-y-3">
+          <div className="pt-4 border-t border-gray-700/50 space-y-3" data-testid="route-details">
             <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
               Route Details
             </h4>
@@ -134,7 +134,7 @@ export default function RoutePlanner({ onRouteCalculated, className = '' }: Rout
                   <TrendingUp className="w-3 h-3" />
                   Safety Score
                 </div>
-                <div className="text-2xl font-mono font-bold text-cyan-400">
+                <div className="text-2xl font-mono font-bold text-cyan-400" data-testid="text-route-safety-score">
                   {currentRoute.averageSafetyScore}
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function RoutePlanner({ onRouteCalculated, className = '' }: Rout
                   <Clock className="w-3 h-3" />
                   Est. Time
                 </div>
-                <div className="text-2xl font-mono font-bold text-white">
+                <div className="text-2xl font-mono font-bold text-white" data-testid="text-route-time">
                   {currentRoute.estimatedTime}
                   <span className="text-sm font-normal text-gray-400 ml-1">min</span>
                 </div>
@@ -153,8 +153,8 @@ export default function RoutePlanner({ onRouteCalculated, className = '' }: Rout
             
             <div className="bg-gray-800/60 rounded-lg p-3">
               <div className="text-gray-400 text-xs mb-1">Distance</div>
-              <div className="text-lg font-mono font-semibold text-white">
-                {currentRoute.distance.toFixed(2)} km
+              <div className="text-lg font-mono font-semibold text-white" data-testid="text-route-distance">
+                {currentRoute.distance?.toFixed(2) || '0.00'} km
               </div>
             </div>
           </div>
